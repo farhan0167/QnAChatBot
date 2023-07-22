@@ -3,6 +3,8 @@ import streamlit as st
 from PyPDF2 import PdfReader
 from brain import Brain
 import pandas as pd
+import requests
+import io
 
 #Init
 openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -17,15 +19,26 @@ if "messages" not in st.session_state:
 if "messages_context" not in st.session_state:
     st.session_state.messages_context = []
 
+if 'clicked' not in st.session_state:
+    st.session_state.clicked = False
+
 @st.cache_resource
 def load_model():
     return Brain()
 model = load_model()
 
 @st.cache_data
-def load_data(doc_name, _model):
-    # creating a pdf reader object
-    reader = PdfReader(doc_name)
+def load_data(doc, _model, load_type):
+    if load_type == "url":
+        r = requests.get(doc)
+        doc_title = doc.split('/')[-1]
+        doc = io.BytesIO(r.content)
+        reader = PdfReader(doc)
+        
+    elif load_type == "upload":
+        reader = PdfReader(doc)
+        doc_title = doc.name
+
 
     # Create lists to store data for each paragraph
     title = []
@@ -41,7 +54,7 @@ def load_data(doc_name, _model):
     for page in range(len(reader.pages)):
         page_content = reader.pages[page].extract_text().split("\n\n")
         for paragraph_num, paragraph in enumerate(page_content):
-            title.append(doc_name.name)
+            title.append(doc_title)
             heading.append(f'Page {page + 1}, Paragraph {paragraph_num}')
             content.append(paragraph)
             tokens.append(count_words(paragraph))
@@ -60,6 +73,8 @@ def load_data(doc_name, _model):
 
     return df, document_embeddings
 
+def click_button():
+    st.session_state.clicked = True
 
 #Main App Below:
 
@@ -67,9 +82,21 @@ st.title("Q/A Bot")
 st.write("Upload a document and ask GPT about the document.")
 
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
+st.markdown("Or")
+
+with st.form(key='my_form'):
+    text_input = st.text_input(label='Enter a PDF url', value="s3://afi225-learning-bucket/embeddings_pdf_docs/Q1-2023-Amazon-Earnings-Release.pdf")
+    submit_button = st.form_submit_button(label='Scan URL', on_click=click_button)
+    
+
+
 if uploaded_file:
     #UploadedFile(id=1, name='Resume for lawyer.pdf', type='application/pdf', size=58651)
-    df, document_embeddings = load_data(uploaded_file, model)
+    st.session_state.clicked = False
+    df, document_embeddings = load_data(uploaded_file, model, "upload")
+
+if st.session_state.clicked:
+    df, document_embeddings = load_data(text_input, model, "url")
 
 
 for message in st.session_state.messages:
@@ -77,7 +104,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 if prompt := st.chat_input("Send a message"):
-
+    
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
