@@ -78,6 +78,14 @@ def click_button():
 
 #Main App Below:
 
+with st.sidebar:
+   st.title("Welcome to Q/A Bot")
+   st.write("Powered by OpenAI GPT 3.5")
+   st.write("[About me](https://portfolio.ahmadfarhanishraq.com)")
+   st.write("[Project Link](https://github.com/farhan0167/QnAChatBot)")
+   st.write("[Github](https://github.com/farhan0167)")
+   
+
 st.title("Q/A Bot")
 st.write("Upload a document and ask GPT about the document.")
 
@@ -85,7 +93,7 @@ uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 st.markdown("Or")
 
 with st.form(key='my_form'):
-    text_input = st.text_input(label='Enter a PDF url', value="s3://afi225-learning-bucket/embeddings_pdf_docs/Q1-2023-Amazon-Earnings-Release.pdf")
+    text_input = st.text_input(label='Enter a PDF url', value="https://afi225-learning-bucket.s3.amazonaws.com/embeddings_pdf_docs/Q1-2023-Amazon-Earnings-Release.pdf")
     submit_button = st.form_submit_button(label='Scan URL', on_click=click_button)
     
 
