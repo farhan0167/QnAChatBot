@@ -2,7 +2,7 @@
 
 ### [Live Demo](https://qnachatbotgit-wt3gsf18sv.streamlit.app/)
 
-QnAChatBot allows you to upload text heavy pdf documents, and chat with the bot based on the document. 
+QnAChatBot allows you to upload text heavy pdf documents, and chat with the bot based on the document.
 
 ## Use Cases
 1. Company financials, and earnings call analyzer.
@@ -10,6 +10,13 @@ QnAChatBot allows you to upload text heavy pdf documents, and chat with the bot 
 3. Write cover letters based on resumes.
 4. Ask questions on course work, lab materials, or any educational document
 
+### Use Case Demo
+
+1. Company Financials
+![gif of company financials](/ChatApp/assets/earnings.gif)
+
+1. Resume to Cover Letter
+![gif of resume to cover letter](/ChatApp/assets/resume.gif)
 
 ## Prior Work
 
