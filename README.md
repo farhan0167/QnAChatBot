@@ -13,10 +13,10 @@ QnAChatBot allows you to upload text heavy pdf documents, and chat with the bot 
 ### Use Case Demo
 
 1. Company Financials
-![gif of company financials](/ChatApp/assets/earnings.gif)
+![gif of company financials](https://afi225-learning-bucket.s3.amazonaws.com/embeddings_pdf_docs/earnings.gif)
 
 1. Resume to Cover Letter
-![gif of resume to cover letter](/ChatApp/assets/resume.gif)
+![gif of resume to cover letter](https://afi225-learning-bucket.s3.amazonaws.com/embeddings_pdf_docs/resume.gif)
 
 ## Prior Work
 
